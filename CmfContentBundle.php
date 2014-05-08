@@ -14,6 +14,7 @@ namespace Symfony\Cmf\Bundle\ContentBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrMappingsPass;
+use Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrAliasMappingsPass;
 
 class CmfContentBundle extends Bundle
 {
@@ -26,6 +27,16 @@ class CmfContentBundle extends Bundle
                         realpath(__DIR__ . '/Resources/config/doctrine-model') => 'Symfony\Cmf\Bundle\ContentBundle\Model',
                         realpath(__DIR__ . '/Resources/config/doctrine-phpcr') => 'Symfony\Cmf\Bundle\ContentBundle\Doctrine\Phpcr',
                     ),
+                    array('cmf_content.manager_name'),
+                    'cmf_content.backend_type_phpcr'
+                )
+            );
+        }
+
+        if (class_exists('Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrAliasMappingsPass')) {
+            $container->addCompilerPass(
+                new DoctrinePhpcrAliasMappingsPass(
+                    array('CmfContentBundle' => 'Symfony\Cmf\Bundle\ContentBundle\Doctrine\Phpcr'),
                     array('cmf_content.manager_name'),
                     'cmf_content.backend_type_phpcr'
                 )
